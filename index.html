@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aanwezigheid VU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+  --bg:#F3F5F8; --surface:#FFFFFF; --ink:#16202C; --muted:#5B6878; --line:#DCE2EA;
+  --accent:#0B6E8A; --accent-ink:#FFFFFF; --mine:#E0762B; --ok:#1F8A4C; --warn:#B7791F;
+  --heat0:#EEF3F7; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F151C; --surface:#17202A; --ink:#E7EDF3; --muted:#93A1B2; --line:#2A3542;
+  --accent:#3AA7C7; --accent-ink:#06141A; --mine:#F0934E; --ok:#4CC27E; --warn:#E0A94A;
+  --heat0:#1C2733; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0F151C; --surface:#17202A; --ink:#E7EDF3; --muted:#93A1B2; --line:#2A3542;
+  --accent:#3AA7C7; --accent-ink:#06141A; --mine:#F0934E; --ok:#4CC27E; --warn:#E0A94A;
+  --heat0:#1C2733; color-scheme:dark;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Onest,system-ui,-apple-system,"Segoe UI",sans-serif;padding-inline:16px;padding-block:28px 48px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1{font-size:clamp(24px,4vw,32px);line-height:1.15;margin:0;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:17px;margin:0;font-weight:600}
+.lede{color:var(--muted);margin:6px 0 0;max-width:62ch}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+label.lbl{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px;font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:min(320px,100%)}
+input[type=text]:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;cursor:pointer;border-radius:8px}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;padding:10px 16px;font-weight:600}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);padding:8px 12px}
+.status{font-size:13px;color:var(--muted);min-height:20px}
+.status.dirty{color:var(--warn)} .status.saved{color:var(--ok)}
+.weeknav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between}
+.weeknav .mid{display:flex;align-items:center;gap:8px}
+.weeklabel{font-weight:600;min-width:12ch;text-align:center}
+.weeklabel small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.gridwrap{overflow-x:auto;margin-top:14px}
+table.grid{border-collapse:separate;border-spacing:4px;width:100%;min-width:360px;table-layout:fixed}
+.grid th{font-weight:600;font-size:13px;padding:4px 2px;text-align:center}
+.grid th.time{width:78px;text-align:left;color:var(--muted);font-weight:500;font-size:12px}
+.grid th .d{display:block;color:var(--muted);font-weight:400;font-size:12px}
+.grid th.today .d{color:var(--accent);font-weight:600}
+.daytot{font-size:11px;color:var(--muted);font-weight:500}
+.daytot.top{color:var(--accent);font-weight:700}
+.cell{width:100%;height:54px;border:1px solid transparent;background:var(--heat0);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;position:relative;padding:0}
+.cell .n{font-size:17px;font-weight:600}
+.cell .n.zero{opacity:.35;font-weight:500}
+.cell .tag{font-size:10px;letter-spacing:.04em;text-transform:uppercase;font-weight:700}
+.cell.mine{border:2px solid var(--mine);box-shadow:inset 0 0 0 1px var(--surface)}
+.cell.mine .tag{color:inherit}
+.cell.hot .tag{color:var(--accent-ink)}
+.cell.best::after{content:"★";position:absolute;top:2px;right:5px;font-size:11px}
+.cell:disabled{cursor:not-allowed;opacity:.4}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted);margin-top:10px;align-items:center}
+.sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.info{margin-top:10px;font-size:13px;color:var(--muted);min-height:20px}
+.info b{color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stat{padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.stat .k{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.stat .v{font-size:20px;font-weight:700;margin-top:4px}
+.stat .s{font-size:13px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+ol.top{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+ol.top li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center}
+.bar{grid-column:1/-1;height:6px;background:var(--heat0);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.who{grid-column:1/-1;font-size:12px;color:var(--muted)}
+ul.people{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+ul.people li{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.x{background:none;border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 8px}
+.x.confirm{border-color:#C0392B;color:#C0392B}
+.empty{color:var(--muted);font-size:14px;margin-top:10px}
+.note{font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.cell{transition:background-color .15s,border-color .15s}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Wanneer ben jij op de VU?</h1>
+    <p class="lede">Vul je naam in, kies per week de blokken waarop je op de VU bent en klik op <b>Opslaan</b>. Het getal in elk vak is het aantal studenten dat dan aanwezig is.</p>
+  </header>
+
+  <section class="panel">
+    <div class="row">
+      <div>
+        <label class="lbl" for="naam">Jouw naam</label>
+        <input type="text" id="naam" placeholder="Voor- en achternaam" autocomplete="name" maxlength="60">
+      </div>
+      <button class="btn" id="save" disabled>Opslaan</button>
+      <div class="status" id="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="weeknav">
+      <button class="ghost" id="prev" aria-label="Vorige week">← Vorige</button>
+      <div class="mid">
+        <div class="weeklabel" id="weeklabel"></div>
+        <button class="ghost" id="thisweek">Vandaag</button>
+      </div>
+      <button class="ghost" id="next" aria-label="Volgende week">Volgende →</button>
+    </div>
+    <div class="gridwrap"><table class="grid" id="grid"></table></div>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--heat0)"></span>niemand</span>
+      <span><span class="sw" style="background:color-mix(in srgb,var(--accent) 45%,var(--heat0))"></span>enkele</span>
+      <span><span class="sw" style="background:var(--accent)"></span>meeste</span>
+      <span><span class="sw" style="border:2px solid var(--mine)"></span>jouw keuze</span>
+      <span>★ drukste blok van de week</span>
+    </div>
+    <div class="info" id="info">Tik op een vak om het aan of uit te zetten. Beweeg over een vak om te zien wie er is.</div>
+  </section>
+
+  <section class="stats" id="stats"></section>
+
+  <section class="two">
+    <div class="panel">
+      <h2>Populairste momenten</h2>
+      <p class="note" style="margin:4px 0 0">Vanaf vandaag, alle weken samen.</p>
+      <ol class="top" id="top"></ol>
+    </div>
+    <div class="panel">
+      <h2>Deelnemers <span class="mono" id="pcount" style="color:var(--muted);font-weight:500"></span></h2>
+      <ul class="people" id="people"></ul>
+    </div>
+  </section>
+</div>
+
+
+<script>
+/* ============================================================
+   INSTELLING: plak hier de web-app-URL van je Google Apps Script
+   (eindigt op /exec). Zie README.md, stap 1.
+   ============================================================ */
+const API_URL = "https://script.google.com/macros/s/AKfycbxhbpkY3YiykDN_DAD2zzYH0qjrKoUkef3wgJ1qWsW4vx4ObIGXYba5Fqofypb3EOSN/exec";
+
+(function(){
+const SLOTS=[["0900","09:00","11:00"],["1100","11:00","13:00"],["1300","13:00","15:00"],["1500","15:00","17:00"],["1700","17:00","19:00"],["1900","19:00","21:30"]];
+const DAYN=["zo","ma","di","wo","do","vr","za"];
+const MON=["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,"0");
+const iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const parse=s=>{const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const today=new Date();today.setHours(0,0,0,0);const todayIso=iso(today);
+function monday(d){const x=new Date(d);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);x.setHours(0,0,0,0);return x}
+function isoWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-n);const y=new Date(Date.UTC(t.getUTCFullYear(),0,1));return Math.ceil(((t-y)/864e5+1)/7)}
+const fmtDay=d=>DAYN[d.getDay()]+" "+d.getDate()+" "+MON[d.getMonth()];
+const slotLabel=code=>{const s=SLOTS.find(x=>x[0]===code);return s?s[1]+"–"+s[2]:code};
+const keyLabel=k=>{const[ds,c]=k.split("|");return fmtDay(parse(ds))+" · "+slotLabel(c)};
+const configured=/^https:\/\/script\.google\.com\//.test(API_URL);
+
+function startWeek(){const m=monday(today);if(today.getDay()===0||today.getDay()===6)m.setDate(m.getDate()+7);return m}
+let weekStart=startWeek();
+let entries=[];
+let mine=new Set(), savedMine=new Set(), savedName="";
+let online=false, loadedOnce=false;
+
+function store(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}
+function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
+let myId=load("vu-agenda-id");
+if(!myId){myId="s"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);store("vu-agenda-id",myId)}
+const draft=load("vu-agenda-draftname");if(draft)$("naam").value=draft;
+
+function counts(){const m=new Map();for(const e of entries){if(e.id===myId)continue;for(const k of e.slots){if(!m.has(k))m.set(k,[]);m.get(k).push(e.name)}}
+  const myName=$("naam").value.trim()||"Jij";for(const k of mine){if(!m.has(k))m.set(k,[]);m.get(k).push(myName)}return m}
+
+function render(){
+  const c=counts();
+  const days=[...Array(5)].map((_,i)=>{const d=new Date(weekStart);d.setDate(d.getDate()+i);return d});
+  const fri=days[4];
+  $("weeklabel").innerHTML="Week "+isoWeek(weekStart)+"<small>"+weekStart.getDate()+" "+MON[weekStart.getMonth()]+" – "+fri.getDate()+" "+MON[fri.getMonth()]+" "+fri.getFullYear()+"</small>";
+  $("prev").disabled=weekStart<=startWeek();
+  let max=0,best=null;
+  const dayTot=days.map(d=>{const s=new Set();for(const sl of SLOTS){const k=iso(d)+"|"+sl[0];const l=c.get(k)||[];l.forEach(n=>s.add(n));if(l.length>max){max=l.length;best=k}}return s.size});
+  const topDay=Math.max(...dayTot);
+  let h="<thead><tr><th class='time'>Tijd</th>";
+  days.forEach((d,i)=>{h+="<th class='"+(iso(d)===todayIso?"today":"")+"'>"+DAYN[d.getDay()]+"<span class='d'>"+d.getDate()+" "+MON[d.getMonth()]+"</span><span class='daytot"+(topDay>0&&dayTot[i]===topDay?" top":"")+"'>"+dayTot[i]+" stud.</span></th>"});
+  h+="</tr></thead><tbody>";
+  for(const sl of SLOTS){
+    h+="<tr><th class='time mono'>"+sl[1]+"<br>"+sl[2]+"</th>";
+    for(const d of days){
+      const k=iso(d)+"|"+sl[0];const n=(c.get(k)||[]).length;const past=d<today;
+      const pct=max?n/max:0;const hot=pct>.6;
+      const bg=n?"color-mix(in srgb,var(--accent) "+Math.round(25+pct*75)+"%,var(--heat0))":"var(--heat0)";
+      const m=mine.has(k);
+      h+="<td><button class='cell"+(m?" mine":"")+(hot?" hot":"")+(n&&k===best?" best":"")+"' data-k='"+k+"' style='background:"+bg+";color:"+(hot?"var(--accent-ink)":"var(--ink)")+"'"+(past?" disabled":"")+" aria-pressed='"+m+"' aria-label='"+keyLabel(k)+", "+n+" studenten'><span class='n mono"+(n?"":" zero")+"'>"+n+"</span>"+(m?"<span class='tag'>✓ jij</span>":"")+"</button></td>";
+    }
+    h+="</tr>";
+  }
+  $("grid").innerHTML=h+"</tbody>";
+  renderStats(c);renderStatus();
+}
+
+function renderStats(c){
+  const future=[...c.entries()].filter(([k])=>k.split("|")[0]>=todayIso);
+  const people=entries.filter(e=>e.id!==myId).map(e=>({name:e.name,n:e.slots.length}));
+  const myName=$("naam").value.trim();
+  if(myName&&mine.size)people.push({name:myName,n:mine.size,me:true});
+  const dayMap=new Map();for(const[k,l]of future){const d=k.split("|")[0];if(!dayMap.has(d))dayMap.set(d,new Set());l.forEach(n=>dayMap.get(d).add(n))}
+  let bd=null,bdn=0;for(const[d,s]of dayMap)if(s.size>bdn||(s.size===bdn&&bd&&d<bd)){bd=d;bdn=s.size}
+  const slotSum=new Map();for(const[k,l]of future){const s=k.split("|")[1];slotSum.set(s,(slotSum.get(s)||0)+l.length)}
+  let bs=null,bsn=0;for(const[s,n]of slotSum)if(n>bsn){bs=s;bsn=n}
+  const sorted=future.filter(([,l])=>l.length).sort((a,b)=>b[1].length-a[1].length||(a[0]<b[0]?-1:1));
+  const top1=sorted[0];
+  $("stats").innerHTML=
+    stat("Studenten",people.length,people.length===1?"heeft zich aangemeld":"hebben zich aangemeld")+
+    stat("Drukste dag",bd?fmtDay(parse(bd)):"–",bd?bdn+" studenten aanwezig":"nog geen keuzes")+
+    stat("Drukste moment",top1?keyLabel(top1[0]):"–",top1?top1[1].length+" studenten":"nog geen keuzes")+
+    stat("Populairste tijdsblok",bs?slotLabel(bs):"–",bs?bsn+" keer gekozen":"alle weken samen");
+  const tmax=top1?top1[1].length:1;
+  $("top").innerHTML=sorted.length?sorted.slice(0,6).map(([k,l])=>"<li><span>"+esc(keyLabel(k))+"</span><span class='mono'><b>"+l.length+"</b></span><span class='bar'><i style='width:"+(l.length/tmax*100)+"%'></i></span><span class='who'>"+esc(l.slice().sort().join(", "))+"</span></li>").join(""):"<li class='empty'>Nog niemand heeft een moment gekozen. Kies hierboven je eerste blok.</li>";
+  people.sort((a,b)=>a.name.localeCompare(b.name,"nl"));
+  $("pcount").textContent=people.length?"("+people.length+")":"";
+  $("people").innerHTML=people.length?people.map(p=>"<li><span>"+esc(p.name)+(p.me?" <span class='note'>(jij)</span>":"")+"</span><span class='mono note'>"+p.n+" blok"+(p.n===1?"":"ken")+"</span></li>").join(""):"<li class='empty' style='border:0'>Nog geen aanmeldingen.</li>";
+}
+const stat=(k,v,s)=>"<div class='stat'><div class='k'>"+k+"</div><div class='v'>"+esc(String(v))+"</div><div class='s'>"+s+"</div></div>";
+function esc(s){return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))}
+
+function dirty(){if($("naam").value.trim()!==savedName)return true;if(mine.size!==savedMine.size)return true;for(const k of mine)if(!savedMine.has(k))return true;return false}
+function renderStatus(msg,cls){
+  const st=$("status");const n=$("naam").value.trim();
+  if(msg){st.textContent=msg;st.className="status "+(cls||"")}
+  else if(!configured){st.textContent="Nog niet gekoppeld aan de Google Sheet (zie README). Keuzes worden niet bewaard.";st.className="status dirty"}
+  else if(!loadedOnce){st.textContent="Aanmeldingen laden…";st.className="status"}
+  else if(!online){st.textContent="Geen verbinding met de agenda. Herlaad de pagina.";st.className="status dirty"}
+  else if(!n){st.textContent="Vul eerst je naam in.";st.className="status"}
+  else if(dirty()){st.textContent="Niet opgeslagen wijzigingen";st.className="status dirty"}
+  else if(savedName){st.textContent="Opgeslagen ✓";st.className="status saved"}
+  else st.textContent="";
+  $("save").disabled=!(configured&&online&&n&&dirty()&&!saving);
+}
+
+function normalize(list){return (Array.isArray(list)?list:[]).map(e=>({id:String(e.id),name:String(e.name||"Onbekend").slice(0,60),slots:(e.slots||[]).map(String)}))}
+function applyEntries(list,initial){
+  entries=normalize(list);
+  if(initial){const me=entries.find(e=>e.id===myId);
+    if(me){savedName=me.name;savedMine=new Set(me.slots);const typed=$("naam").value.trim();if(!typed||typed===me.name){$("naam").value=me.name;mine=new Set(me.slots)}}}
+  render();
+}
+async function fetchAll(initial){
+  if(!configured)return;
+  try{const r=await fetch(API_URL,{cache:"no-store"});const j=await r.json();if(!j.ok)throw 0;online=true;loadedOnce=true;applyEntries(j.entries,initial)}
+  catch(e){online=false;loadedOnce=true;render()}
+}
+
+$("grid").addEventListener("click",e=>{const b=e.target.closest(".cell");if(!b||b.disabled)return;const k=b.dataset.k;mine.has(k)?mine.delete(k):mine.add(k);render();showInfo(k)});
+function showInfo(k){const l=counts().get(k)||[];$("info").innerHTML="<b>"+esc(keyLabel(k))+"</b> — "+(l.length?l.length+" aanwezig: "+esc(l.slice().sort().join(", ")):"nog niemand")}
+$("grid").addEventListener("pointerover",e=>{const b=e.target.closest(".cell");if(b)showInfo(b.dataset.k)});
+$("grid").addEventListener("focusin",e=>{const b=e.target.closest(".cell");if(b)showInfo(b.dataset.k)});
+$("naam").addEventListener("input",()=>{store("vu-agenda-draftname",$("naam").value);render()});
+$("prev").onclick=()=>{weekStart.setDate(weekStart.getDate()-7);render()};
+$("next").onclick=()=>{weekStart.setDate(weekStart.getDate()+7);render()};
+$("thisweek").onclick=()=>{weekStart=startWeek();render()};
+
+let saving=false;
+$("save").onclick=async()=>{
+  const name=$("naam").value.trim();if(saving||!name||!configured)return;
+  // Zelfde naam op een ander apparaat? Dan die aanmelding bijwerken i.p.v. een dubbele maken.
+  if(!entries.some(e=>e.id===myId)){const same=entries.find(e=>e.name.toLowerCase()===name.toLowerCase());
+    if(same){myId=same.id;store("vu-agenda-id",myId);for(const k of same.slots)mine.add(k)}}
+  saving=true;renderStatus("Bezig met opslaan…");
+  const slots=[...mine].sort();
+  try{
+    const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({id:myId,name,slots})});
+    const j=await r.json();if(!j.ok)throw new Error(j.error);
+    savedName=slots.length?name:"";savedMine=new Set(mine);online=true;saving=false;
+    applyEntries(j.entries,false);renderStatus(slots.length?"Opgeslagen ✓":"Je aanmelding is verwijderd","saved");
+  }catch(e){saving=false;renderStatus("Opslaan lukte niet. Probeer het zo nog eens.","dirty")}
+};
+
+render();
+fetchAll(true);
+setInterval(()=>{if(!saving&&document.visibilityState==="visible")fetchAll(false)},30000);
+})();
+</script>
+</body>
+</html>

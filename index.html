@@ -2,346 +2,272 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0077B3">
-<title>Aanwezigheid VU</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keuzevrijheid onder maatschappelijke druk – enquête</title>
+<meta name="description" content="Anonieme enquête over maatschappelijke druk, ervaren discriminatie, religieuze identiteit en keuzevrijheid rond het dragen van een hoofddoek.">
+<meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
-<style>
-:root{
-  --bg:#F3F5F8; --surface:#FFFFFF; --ink:#16202C; --muted:#5B6878; --line:#DCE2EA;
-  --accent:#0077B3; --accent-ink:#FFFFFF; --mine:#E0762B; --ok:#1F8A4C; --warn:#B7791F;
-  --heat0:#EEF3F7; color-scheme:light;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0F151C; --surface:#17202A; --ink:#E7EDF3; --muted:#93A1B2; --line:#2A3542;
-  --accent:#4FB0E3; --accent-ink:#06141A; --mine:#F0934E; --ok:#4CC27E; --warn:#E0A94A;
-  --heat0:#1C2733; color-scheme:dark;}}
-:root[data-theme="dark"]{
-  --bg:#0F151C; --surface:#17202A; --ink:#E7EDF3; --muted:#93A1B2; --line:#2A3542;
-  --accent:#4FB0E3; --accent-ink:#06141A; --mine:#F0934E; --ok:#4CC27E; --warn:#E0A94A;
-  --heat0:#1C2733; color-scheme:dark;}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Onest,system-ui,-apple-system,"Segoe UI",sans-serif;padding-inline:16px;padding-block:28px 48px}
-.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
-h1{font-size:clamp(24px,4vw,32px);line-height:1.15;margin:0;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
-h2{font-size:17px;margin:0;font-weight:600}
-.lede{color:var(--muted);margin:6px 0 0;max-width:62ch}
-.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
-label.lbl{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px;font-weight:600}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
-input[type=text]{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:min(320px,100%)}
-input[type=text]:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-button{font:inherit;cursor:pointer;border-radius:8px}
-.btn{background:var(--accent);color:var(--accent-ink);border:0;padding:10px 16px;font-weight:600}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);padding:8px 12px}
-.status{font-size:13px;color:var(--muted);min-height:20px}
-.status.dirty{color:var(--warn)} .status.saved{color:var(--ok)}
-.weeknav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between}
-.weeknav .mid{display:flex;align-items:center;gap:8px}
-.weeklabel{font-weight:600;min-width:12ch;text-align:center}
-.weeklabel small{display:block;font-weight:400;color:var(--muted);font-size:13px}
-.gridwrap{overflow-x:auto;margin-top:14px}
-table.grid{border-collapse:separate;border-spacing:4px;width:100%;min-width:360px;table-layout:fixed}
-.grid th{font-weight:600;font-size:13px;padding:4px 2px;text-align:center}
-.grid th.time{width:78px;text-align:left;color:var(--muted);font-weight:500;font-size:12px}
-.grid th .d{display:block;color:var(--muted);font-weight:400;font-size:12px}
-.grid th.today .d{color:var(--accent);font-weight:600}
-.daytot{font-size:11px;color:var(--muted);font-weight:500}
-.daytot.top{color:var(--accent);font-weight:700}
-.cell{width:100%;height:54px;border:1px solid transparent;background:var(--heat0);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;position:relative;padding:0}
-.cell .n{font-size:17px;font-weight:600}
-.cell .n.zero{opacity:.35;font-weight:500}
-.cell .tag{font-size:10px;letter-spacing:.04em;text-transform:uppercase;font-weight:700}
-.cell.mine{border:2px solid var(--mine);box-shadow:inset 0 0 0 1px var(--surface)}
-.cell.mine .tag{color:inherit}
-.cell.hot .tag{color:var(--accent-ink)}
-.cell.best::after{content:"★";position:absolute;top:2px;right:5px;font-size:11px}
-.cell:disabled{cursor:not-allowed;opacity:.4}
-.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted);margin-top:10px;align-items:center}
-.sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:5px}
-.info{margin-top:10px;font-size:13px;color:var(--muted);min-height:20px}
-.info b{color:var(--ink)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.stat{padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
-.stat .k{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
-.stat .v{font-size:20px;font-weight:700;margin-top:4px}
-.stat .s{font-size:13px;color:var(--muted)}
-.two{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
-@media (max-width:760px){.two{grid-template-columns:1fr}}
-ol.top{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
-ol.top li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center}
-.bar{grid-column:1/-1;height:6px;background:var(--heat0);border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--accent)}
-.who{grid-column:1/-1;font-size:12px;color:var(--muted)}
-ul.people{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
-ul.people li{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
-.x{background:none;border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 8px}
-.x.confirm{border-color:#C0392B;color:#C0392B}
-.empty{color:var(--muted);font-size:14px;margin-top:10px}
-.note{font-size:13px;color:var(--muted)}
-@media (prefers-reduced-motion:no-preference){.cell{transition:background-color .15s,border-color .15s}}
-
-.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px}
-.brand img{height:44px;width:auto;display:block}
-.brand .tagline{font-size:12px;color:#5B6878;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
-.foot{font-size:12px;color:var(--muted);text-align:center}
-.mobile{display:none}
-.daytabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:14px}
-.daytab{background:var(--heat0);border:1px solid transparent;color:var(--ink);padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:13px;font-weight:600;line-height:1.2}
-.daytab small{font-weight:400;color:var(--muted);font-size:12px}
-.daytab .c{font-size:11px;font-weight:600;color:var(--accent)}
-.daytab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
-.daytab[aria-selected="true"] small,.daytab[aria-selected="true"] .c{color:var(--accent-ink)}
-.daytab.today:not([aria-selected="true"]){border-color:var(--accent)}
-.slotlist{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-.slot{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:4px 12px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);color:var(--ink);padding:12px 14px;min-height:64px}
-.slot .t{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:14px;line-height:1.3}
-.slot .names{grid-column:1/-1;font-size:12px;color:var(--muted);overflow-wrap:anywhere}
-.slot .cnt{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
-.slot .cnt i{flex:1;height:6px;border-radius:3px;background:var(--heat0);overflow:hidden;position:relative;max-width:120px}
-.slot .cnt i b{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:3px}
-.slot .pick{font-size:13px;font-weight:600;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:5px 10px;white-space:nowrap}
-.slot.on{border:2px solid var(--mine);padding:11px 13px}
-.slot.on .pick{background:var(--mine);border-color:var(--mine);color:#fff}
-.slot:disabled{opacity:.45;cursor:not-allowed}
-.slot.best .t::after{content:" ★";color:var(--accent)}
-@media (max-width:640px){
-  body{padding-block:12px 32px}
-  .wrap{gap:14px}
-  .brand img{height:34px}
-  .brand .tagline{display:none}
-  .panel{padding:14px}
-  .gridwrap,.legend,.info{display:none}
-  .mobile{display:block}
-  .weeknav .txt{display:none}
-  .weeknav{flex-wrap:nowrap}
-  .weeklabel{min-width:0}
-  .namepanel{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;box-shadow:0 4px 14px rgba(0,0,0,.08)}
-  .row{flex-wrap:nowrap;align-items:flex-end}
-  .row>div:first-child{flex:1;min-width:0}
-  input[type=text]{width:100%}
-  .status{position:absolute;left:14px;bottom:-2px;font-size:12px}
-  .namepanel{padding-bottom:22px;position:sticky}
-  .stat .v{font-size:17px}
-  .stats{grid-template-columns:1fr 1fr;gap:8px}
-  .stat{padding:12px}
-}
-</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="wrap">
-  <div class="brand"><img src="data:image/png;base64,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" alt="Vrije Universiteit Amsterdam"><span class="tagline">Aanwezigheidsplanner</span></div>
-  <header>
-    <h1>Wanneer ben jij op de VU?</h1>
-    <p class="lede">Vul je naam in, kies per week de blokken waarop je op de VU bent en klik op <b>Opslaan</b>. Het getal in elk vak is het aantal studenten dat dan aanwezig is.</p>
-  </header>
-
-  <section class="panel namepanel">
-    <div class="row">
-      <div>
-        <label class="lbl" for="naam">Jouw naam</label>
-        <input type="text" id="naam" placeholder="Voor- en achternaam" autocomplete="name" maxlength="60">
-      </div>
-      <button class="btn" id="save" disabled>Opslaan</button>
-      <div class="status" id="status" aria-live="polite"></div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <div class="weeknav">
-      <button class="ghost" id="prev" aria-label="Vorige week">←<span class="txt"> Vorige</span></button>
-      <div class="mid">
-        <div class="weeklabel" id="weeklabel"></div>
-        <button class="ghost" id="thisweek">Vandaag</button>
-      </div>
-      <button class="ghost" id="next" aria-label="Volgende week"><span class="txt">Volgende </span>→</button>
-    </div>
-    <div class="gridwrap"><table class="grid" id="grid"></table></div>
-    <div class="mobile"><div class="daytabs" id="daytabs" role="tablist"></div><div class="slotlist" id="slotlist"></div></div>
-    <div class="legend">
-      <span><span class="sw" style="background:var(--heat0)"></span>niemand</span>
-      <span><span class="sw" style="background:color-mix(in srgb,var(--accent) 45%,var(--heat0))"></span>enkele</span>
-      <span><span class="sw" style="background:var(--accent)"></span>meeste</span>
-      <span><span class="sw" style="border:2px solid var(--mine)"></span>jouw keuze</span>
-      <span>★ drukste blok van de week</span>
-    </div>
-    <div class="info" id="info">Tik op een vak om het aan of uit te zetten. Beweeg over een vak om te zien wie er is.</div>
-  </section>
-
-  <section class="stats" id="stats"></section>
-
-  <section class="two">
-    <div class="panel">
-      <h2>Populairste momenten</h2>
-      <p class="note" style="margin:4px 0 0">Vanaf vandaag, alle weken samen.</p>
-      <ol class="top" id="top"></ol>
-    </div>
-    <div class="panel">
-      <h2>Deelnemers <span class="mono" id="pcount" style="color:var(--muted);font-weight:500"></span></h2>
-      <ul class="people" id="people"></ul>
-    </div>
-  </section>
+<div class="topbar">
+  <div class="inner"><div class="brand">Keuzevrijheid onder maatschappelijke druk</div><div id="stepLabel" class="small muted"></div></div>
+  <div class="progress" aria-hidden="true"><div id="bar"></div></div>
 </div>
 
+<main class="wrap">
+  <div id="configWarn" class="notice error" style="display:none;margin-bottom:16px">
+    Testmodus: er is nog geen Apps Script-URL ingesteld in <code>config.js</code>. Antwoorden worden níet opgeslagen.
+  </div>
+  <form id="app" novalidate autocomplete="off"></form>
+</main>
 
+<footer class="foot">
+  <span>Postacademische Islamitische Ambtsopleiding</span>
+  <a href="resultaten.html">Onderzoeker</a>
+</footer>
+
+<script src="config.js"></script>
+<script src="questions.js"></script>
 <script>
-/* ============================================================
-   INSTELLING: plak hier de web-app-URL van je Google Apps Script
-   (eindigt op /exec). Zie README.md, stap 1.
-   ============================================================ */
-const API_URL = "https://script.google.com/macros/s/AKfycbxhbpkY3YiykDN_DAD2zzYH0qjrKoUkef3wgJ1qWsW4vx4ObIGXYba5Fqofypb3EOSN/exec";
+(function () {
+  const app = document.getElementById('app');
+  const bar = document.getElementById('bar');
+  const stepLabel = document.getElementById('stepLabel');
+  const configured = /^https:\/\/script\.google\.com\//.test(CONFIG.APPS_SCRIPT_URL);
+  if (!configured) document.getElementById('configWarn').style.display = 'block';
 
-(function(){
-const SLOTS=[["0900","09:00","11:00"],["1100","11:00","13:00"],["1300","13:00","15:00"],["1500","15:00","17:00"],["1700","17:00","19:00"],["1900","19:00","21:30"]];
-const DAYN=["zo","ma","di","wo","do","vr","za"];
-const MON=["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
-const $=id=>document.getElementById(id);
-const pad=n=>String(n).padStart(2,"0");
-const iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
-const parse=s=>{const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
-const today=new Date();today.setHours(0,0,0,0);const todayIso=iso(today);
-function monday(d){const x=new Date(d);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);x.setHours(0,0,0,0);return x}
-function isoWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-n);const y=new Date(Date.UTC(t.getUTCFullYear(),0,1));return Math.ceil(((t-y)/864e5+1)/7)}
-const fmtDay=d=>DAYN[d.getDay()]+" "+d.getDate()+" "+MON[d.getMonth()];
-const slotLabel=code=>{const s=SLOTS.find(x=>x[0]===code);return s?s[1]+"–"+s[2]:code};
-const keyLabel=k=>{const[ds,c]=k.split("|");return fmtDay(parse(ds))+" · "+slotLabel(c)};
-const configured=/^https:\/\/script\.google\.com\//.test(API_URL);
+  const answers = {};           // key -> waarde
+  const startedAt = Date.now();
+  let view = 'intro';           // 'intro' | page index | 'stop' | 'interview' | 'done'
+  let busy = false;
 
-function startWeek(){const m=monday(today);if(today.getDay()===0||today.getDay()===6)m.setDate(m.getDate()+7);return m}
-let weekStart=startWeek();
-let mDay=defaultDay();
-function defaultDay(){const i=Math.round((today-weekStart)/864e5);return i>=0&&i<5?i:0}
-let entries=[];
-let mine=new Set(), savedMine=new Set(), savedName="";
-let online=false, loadedOnce=false;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const P = SURVEY.pages;
 
-function store(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}
-function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
-let myId=load("vu-agenda-id");
-if(!myId){myId="s"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);store("vu-agenda-id",myId)}
-const draft=load("vu-agenda-draftname");if(draft)$("naam").value=draft;
+  // ── Rendering ─────────────────────────────────────────────
+  function renderQuestion(q) {
+    const id = 'q_' + q.key;
+    const req = q.required ? '<span class="req" aria-hidden="true">*</span>' : '';
+    const num = q.n ? `<span class="num">${esc(q.n)}.</span>` : '';
+    const help = q.help ? `<div class="q-help">${esc(q.help)}</div>` : '';
+    let body = '';
+    const val = answers[q.key];
 
-function counts(){const m=new Map();for(const e of entries){if(e.id===myId)continue;for(const k of e.slots){if(!m.has(k))m.set(k,[]);m.get(k).push(e.name)}}
-  const myName=$("naam").value.trim()||"Jij";for(const k of mine){if(!m.has(k))m.set(k,[]);m.get(k).push(myName)}return m}
-
-function render(){
-  const c=counts();
-  const days=[...Array(5)].map((_,i)=>{const d=new Date(weekStart);d.setDate(d.getDate()+i);return d});
-  const fri=days[4];
-  $("weeklabel").innerHTML="Week "+isoWeek(weekStart)+"<small>"+weekStart.getDate()+" "+MON[weekStart.getMonth()]+" – "+fri.getDate()+" "+MON[fri.getMonth()]+" "+fri.getFullYear()+"</small>";
-  $("prev").disabled=weekStart<=startWeek();
-  let max=0,best=null;
-  const dayTot=days.map(d=>{const s=new Set();for(const sl of SLOTS){const k=iso(d)+"|"+sl[0];const l=c.get(k)||[];l.forEach(n=>s.add(n));if(l.length>max){max=l.length;best=k}}return s.size});
-  const topDay=Math.max(...dayTot);
-  let h="<thead><tr><th class='time'>Tijd</th>";
-  days.forEach((d,i)=>{h+="<th class='"+(iso(d)===todayIso?"today":"")+"'>"+DAYN[d.getDay()]+"<span class='d'>"+d.getDate()+" "+MON[d.getMonth()]+"</span><span class='daytot"+(topDay>0&&dayTot[i]===topDay?" top":"")+"'>"+dayTot[i]+" stud.</span></th>"});
-  h+="</tr></thead><tbody>";
-  for(const sl of SLOTS){
-    h+="<tr><th class='time mono'>"+sl[1]+"<br>"+sl[2]+"</th>";
-    for(const d of days){
-      const k=iso(d)+"|"+sl[0];const n=(c.get(k)||[]).length;const past=d<today;
-      const pct=max?n/max:0;const hot=pct>.6;
-      const bg=n?"color-mix(in srgb,var(--accent) "+Math.round(25+pct*75)+"%,var(--heat0))":"var(--heat0)";
-      const m=mine.has(k);
-      h+="<td><button class='cell"+(m?" mine":"")+(hot?" hot":"")+(n&&k===best?" best":"")+"' data-k='"+k+"' style='background:"+bg+";color:"+(hot?"var(--accent-ink)":"var(--ink)")+"'"+(past?" disabled":"")+" aria-pressed='"+m+"' aria-label='"+keyLabel(k)+", "+n+" studenten'><span class='n mono"+(n?"":" zero")+"'>"+n+"</span>"+(m?"<span class='tag'>✓ jij</span>":"")+"</button></td>";
+    if (q.type === 'radio' || q.type === 'likert' || q.type === 'checkbox') {
+      const t = q.type === 'checkbox' ? 'checkbox' : 'radio';
+      const cls = q.type === 'likert' ? 'options likert' : 'options';
+      body = `<div class="${cls}" style="--n:${q.options.length}" role="${t === 'radio' ? 'radiogroup' : 'group'}" aria-labelledby="${id}_l">` +
+        q.options.map((o, i) => {
+          const v = q.type === 'likert' ? String(i + 1) : o;
+          const checked = t === 'checkbox' ? (Array.isArray(val) && val.includes(o)) : String(val) === v;
+          return `<label class="opt"><input type="${t}" name="${q.key}" value="${esc(v)}" ${checked ? 'checked' : ''}><span>${esc(o)}</span></label>`;
+        }).join('') + '</div>';
+      if (q.other) {
+        const show = t === 'checkbox' ? (Array.isArray(val) && val.includes(q.other)) : val === q.other;
+        body += `<input type="text" class="other-input" name="${q.key}_anders" placeholder="Namelijk…" maxlength="200" value="${esc(answers[q.key + '_anders'] || '')}" style="display:${show ? 'block' : 'none'}" aria-label="Anders, namelijk">`;
+      }
+    } else if (q.type === 'scale') {
+      body = `<div class="scale" role="radiogroup" aria-labelledby="${id}_l">` +
+        Array.from({ length: q.max - q.min + 1 }, (_, i) => q.min + i).map(v =>
+          `<label><input type="radio" name="${q.key}" value="${v}" ${String(val) === String(v) ? 'checked' : ''}>${v}</label>`).join('') +
+        `</div><div class="scale-ends"><span>${esc(q.minLabel)}</span><span>${esc(q.maxLabel)}</span></div>`;
+    } else if (q.type === 'textarea') {
+      body = `<textarea id="${id}" name="${q.key}" maxlength="4000" aria-labelledby="${id}_l">${esc(val || '')}</textarea>`;
+    } else {
+      const extra = q.type === 'number' ? `inputmode="numeric" min="${q.min}" max="${q.max}" step="1" style="max-width:160px"` : '';
+      const ac = q.autocomplete ? `autocomplete="${q.autocomplete}"` : '';
+      body = `<input id="${id}" type="${q.type}" name="${q.key}" ${extra} ${ac} maxlength="200" value="${esc(val ?? '')}" aria-labelledby="${id}_l">`;
     }
-    h+="</tr>";
+    return `<div class="card q" data-key="${q.key}">
+      <span class="q-label" id="${id}_l">${num}${esc(q.label)}${req}</span>${help}${body}
+      <div class="err" role="alert">${q.type === 'email' ? 'Vul een geldig e-mailadres in.' : q.type === 'number' ? `Vul een leeftijd in tussen ${q.min} en ${q.max}.` : 'Deze vraag is verplicht.'}</div>
+    </div>`;
   }
-  $("grid").innerHTML=h+"</tbody>";
-  // mobiel: dag-tabs + lijst met blokken
-  $("daytabs").innerHTML=days.map((d,i)=>"<button class='daytab"+(iso(d)===todayIso?" today":"")+"' role='tab' data-i='"+i+"' aria-selected='"+(i===mDay)+"'>"+DAYN[d.getDay()]+"<small>"+d.getDate()+" "+MON[d.getMonth()]+"</small><span class='c'>"+dayTot[i]+"</span></button>").join("");
-  const md=days[mDay];const mPast=md<today;
-  $("slotlist").innerHTML=SLOTS.map(sl=>{const k=iso(md)+"|"+sl[0];const l=c.get(k)||[];const n=l.length;const on=mine.has(k);
-    return "<button class='slot"+(on?" on":"")+(n&&k===best?" best":"")+"' data-k='"+k+"'"+(mPast?" disabled":"")+" aria-pressed='"+on+"'><span class='t'>"+sl[1]+"<br>"+sl[2]+"</span><span class='cnt'><b class='mono'>"+n+"</b> "+(n===1?"student":"studenten")+"<i><b style='width:"+(max?n/max*100:0)+"%'></b></i></span><span class='pick'>"+(on?"✓ Ik ben er":"+ Ik ben er")+"</span>"+(n?"<span class='names'>"+esc(l.slice().sort().join(", "))+"</span>":"")+"</button>"}).join("");
-  renderStats(c);renderStatus();
-}
 
-function renderStats(c){
-  const future=[...c.entries()].filter(([k])=>k.split("|")[0]>=todayIso);
-  const people=entries.filter(e=>e.id!==myId).map(e=>({name:e.name,n:e.slots.length}));
-  const myName=$("naam").value.trim();
-  if(myName&&mine.size)people.push({name:myName,n:mine.size,me:true});
-  const dayMap=new Map();for(const[k,l]of future){const d=k.split("|")[0];if(!dayMap.has(d))dayMap.set(d,new Set());l.forEach(n=>dayMap.get(d).add(n))}
-  let bd=null,bdn=0;for(const[d,s]of dayMap)if(s.size>bdn||(s.size===bdn&&bd&&d<bd)){bd=d;bdn=s.size}
-  const slotSum=new Map();for(const[k,l]of future){const s=k.split("|")[1];slotSum.set(s,(slotSum.get(s)||0)+l.length)}
-  let bs=null,bsn=0;for(const[s,n]of slotSum)if(n>bsn){bs=s;bsn=n}
-  const sorted=future.filter(([,l])=>l.length).sort((a,b)=>b[1].length-a[1].length||(a[0]<b[0]?-1:1));
-  const top1=sorted[0];
-  $("stats").innerHTML=
-    stat("Studenten",people.length,people.length===1?"heeft zich aangemeld":"hebben zich aangemeld")+
-    stat("Drukste dag",bd?fmtDay(parse(bd)):"–",bd?bdn+" studenten aanwezig":"nog geen keuzes")+
-    stat("Drukste moment",top1?keyLabel(top1[0]):"–",top1?top1[1].length+" studenten":"nog geen keuzes")+
-    stat("Populairste tijdsblok",bs?slotLabel(bs):"–",bs?bsn+" keer gekozen":"alle weken samen");
-  const tmax=top1?top1[1].length:1;
-  $("top").innerHTML=sorted.length?sorted.slice(0,6).map(([k,l])=>"<li><span>"+esc(keyLabel(k))+"</span><span class='mono'><b>"+l.length+"</b></span><span class='bar'><i style='width:"+(l.length/tmax*100)+"%'></i></span><span class='who'>"+esc(l.slice().sort().join(", "))+"</span></li>").join(""):"<li class='empty'>Nog niemand heeft een moment gekozen. Kies hierboven je eerste blok.</li>";
-  people.sort((a,b)=>a.name.localeCompare(b.name,"nl"));
-  $("pcount").textContent=people.length?"("+people.length+")":"";
-  $("people").innerHTML=people.length?people.map(p=>"<li><span>"+esc(p.name)+(p.me?" <span class='note'>(jij)</span>":"")+"</span><span class='mono note'>"+p.n+" blok"+(p.n===1?"":"ken")+"</span></li>").join(""):"<li class='empty' style='border:0'>Nog geen aanmeldingen.</li>";
-}
-const stat=(k,v,s)=>"<div class='stat'><div class='k'>"+k+"</div><div class='v'>"+esc(String(v))+"</div><div class='s'>"+s+"</div></div>";
-function esc(s){return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))}
+  function setProgress(frac, label) {
+    bar.style.width = Math.round(frac * 100) + '%';
+    stepLabel.textContent = label || '';
+  }
 
-function dirty(){if($("naam").value.trim()!==savedName)return true;if(mine.size!==savedMine.size)return true;for(const k of mine)if(!savedMine.has(k))return true;return false}
-function renderStatus(msg,cls){
-  const st=$("status");const n=$("naam").value.trim();
-  if(msg){st.textContent=msg;st.className="status "+(cls||"")}
-  else if(!configured){st.textContent="Nog niet gekoppeld aan de Google Sheet (zie README). Keuzes worden niet bewaard.";st.className="status dirty"}
-  else if(!loadedOnce){st.textContent="Aanmeldingen laden…";st.className="status"}
-  else if(!online){st.textContent="Geen verbinding met de agenda. Herlaad de pagina.";st.className="status dirty"}
-  else if(!n){st.textContent="Vul eerst je naam in.";st.className="status"}
-  else if(dirty()){st.textContent="Niet opgeslagen wijzigingen";st.className="status dirty"}
-  else if(savedName){st.textContent="Opgeslagen ✓";st.className="status saved"}
-  else st.textContent="";
-  $("save").disabled=!(configured&&online&&n&&dirty()&&!saving);
-}
+  function render() {
+    window.scrollTo(0, 0);
+    if (view === 'intro') {
+      setProgress(0, '');
+      app.innerHTML = `<div class="card">
+        <div class="eyebrow">Introductie</div>
+        <h1>${esc(SURVEY.title)}</h1>
+        ${SURVEY.intro.map(p => `<p>${esc(p)}</p>`).join('')}
+        <div class="nav" style="justify-content:flex-end"><button type="button" class="btn primary" data-go="next">Start de vragenlijst</button></div>
+      </div>`;
+    } else if (typeof view === 'number') {
+      const p = P[view];
+      setProgress(view / P.length, `Stap ${view + 1} van ${P.length}`);
+      app.innerHTML = `<div class="section-head"><div class="eyebrow">Onderdeel ${view + 1} van ${P.length}</div><h2>${esc(p.title)}</h2>${p.text ? `<p>${esc(p.text)}</p>` : ''}</div>
+        ${p.questions.map(renderQuestion).join('')}
+        <div id="formErr" class="notice error" style="display:none" role="alert"></div>
+        <div class="nav">
+          <button type="button" class="btn" data-go="back">Terug</button>
+          <button type="button" class="btn primary" data-go="next">${view === P.length - 1 ? 'Verzenden' : 'Volgende'}</button>
+        </div>`;
+    } else if (view === 'stop') {
+      setProgress(1, '');
+      const minor = answers.volwassen === 'Nee';
+      app.innerHTML = `<div class="card center">
+        <h2>Bedankt voor je interesse</h2>
+        <p>${minor ? 'Dit onderzoek is alleen bedoeld voor deelnemers van 18 jaar en ouder.' : 'Je hebt aangegeven geen toestemming te geven.'} Daarom eindigt de vragenlijst hier. Er zijn geen antwoorden opgeslagen.</p>
+        <button type="button" class="btn" data-go="back">Toch terug naar de vorige vraag</button>
+      </div>`;
+    } else if (view === 'interview') {
+      const iv = SURVEY.interview;
+      setProgress(1, 'Interview');
+      app.innerHTML = `<div class="section-head"><div class="eyebrow">Je enquête is verzonden ✓</div><h2>${esc(iv.title)}</h2>${iv.text.map(t => `<p>${esc(t)}</p>`).join('')}</div>
+        ${iv.questions.map(renderQuestion).join('')}
+        <div class="hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <div id="formErr" class="notice error" style="display:none" role="alert"></div>
+        <div class="nav">
+          <button type="button" class="btn" data-go="skip">Toch niet aanmelden</button>
+          <button type="button" class="btn primary" data-go="interview">Aanmelden</button>
+        </div>`;
+    } else if (view === 'done' || view === 'done-interview') {
+      setProgress(1, 'Afgerond');
+      app.innerHTML = `<div class="card center">
+        <div class="done-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h2>Hartelijk dank voor je deelname!</h2>
+        <p>${view === 'done-interview'
+          ? 'Je aanmelding voor het online interview is ontvangen. Ik neem binnenkort per e-mail contact met je op om een moment in te plannen.'
+          : 'Je antwoorden zijn opgeslagen. De vragenlijst is hiermee afgerond; je kunt dit venster sluiten.'}</p>
+        ${CONFIG.CONTACT_EMAIL ? `<p class="small muted">Vragen over het onderzoek? Mail naar <a href="mailto:${esc(CONFIG.CONTACT_EMAIL)}">${esc(CONFIG.CONTACT_EMAIL)}</a>.</p>` : ''}
+      </div>`;
+    }
+  }
 
-function normalize(list){return (Array.isArray(list)?list:[]).map(e=>({id:String(e.id),name:String(e.name||"Onbekend").slice(0,60),slots:(e.slots||[]).map(String)}))}
-function applyEntries(list,initial){
-  entries=normalize(list);
-  if(initial){const me=entries.find(e=>e.id===myId);
-    if(me){savedName=me.name;savedMine=new Set(me.slots);const typed=$("naam").value.trim();if(!typed||typed===me.name){$("naam").value=me.name;mine=new Set(me.slots)}}}
+  // ── Antwoorden lezen & valideren ──────────────────────────
+  function collect(questions) {
+    questions.forEach(q => {
+      if (q.type === 'checkbox') {
+        answers[q.key] = [...app.querySelectorAll(`input[name="${q.key}"]:checked`)].map(i => i.value);
+      } else if (['radio', 'likert', 'scale'].includes(q.type)) {
+        const c = app.querySelector(`input[name="${q.key}"]:checked`);
+        answers[q.key] = c ? (q.type === 'radio' ? c.value : Number(c.value)) : undefined;
+      } else {
+        const el = app.querySelector(`[name="${q.key}"]`);
+        answers[q.key] = el ? el.value.trim() : '';
+        if (q.type === 'number' && answers[q.key] !== '') answers[q.key] = Number(answers[q.key]);
+      }
+      if (q.other) {
+        const o = app.querySelector(`[name="${q.key}_anders"]`);
+        answers[q.key + '_anders'] = o && o.style.display !== 'none' ? o.value.trim() : '';
+      }
+    });
+  }
+
+  function validate(questions) {
+    let first = null;
+    questions.forEach(q => {
+      const v = answers[q.key];
+      let ok = true;
+      if (q.required) ok = !(v === undefined || v === '' || (Array.isArray(v) && !v.length));
+      if (ok && q.type === 'number' && v !== '') ok = Number.isInteger(v) && v >= q.min && v <= q.max;
+      if (ok && q.type === 'email') ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      const card = app.querySelector(`.q[data-key="${q.key}"]`);
+      card.classList.toggle('invalid', !ok);
+      if (!ok && !first) first = card;
+    });
+    if (first) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
+    return true;
+  }
+
+  // ── Versturen ─────────────────────────────────────────────
+  async function post(action, data) {
+    if (!configured) { await new Promise(r => setTimeout(r, 400)); console.info('[testmodus]', action, data); return { ok: true }; }
+    const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, data, website: data.website || '' }) });
+    return res.json();
+  }
+
+  function surveyPayload() {
+    const out = {};
+    P.forEach(p => p.questions.forEach(q => {
+      const v = answers[q.key];
+      out[q.key] = Array.isArray(v) ? v.join('; ') : (v ?? '');
+      if (q.other) out[q.key + '_anders'] = answers[q.key + '_anders'] || '';
+    }));
+    out.duur_sec = Math.round((Date.now() - startedAt) / 1000);
+    return out;
+  }
+
+  async function withBusy(btn, fn) {
+    if (busy) return; busy = true;
+    const label = btn.textContent; btn.disabled = true; btn.textContent = 'Bezig met verzenden…';
+    const err = document.getElementById('formErr'); if (err) err.style.display = 'none';
+    try { await fn(); }
+    catch (e) {
+      if (err) { err.textContent = 'Verzenden is niet gelukt. Controleer je internetverbinding en probeer het opnieuw.'; err.style.display = 'block'; }
+      console.error(e);
+    } finally { busy = false; if (document.body.contains(btn)) { btn.disabled = false; btn.textContent = label; } }
+  }
+
+  // ── Navigatie ─────────────────────────────────────────────
+  app.addEventListener('click', async e => {
+    const btn = e.target.closest('[data-go]'); if (!btn) return;
+    const go = btn.dataset.go;
+
+    if (go === 'back') {
+      if (typeof view === 'number') collect(P[view].questions);
+      view = view === 'stop' ? 0 : (view === 0 ? 'intro' : view - 1);
+      return render();
+    }
+    if (go === 'skip') { view = 'done'; return render(); }
+
+    if (go === 'interview') {
+      const qs = SURVEY.interview.questions; collect(qs);
+      if (!validate(qs)) return;
+      const hp = app.querySelector('[name="website"]');
+      return withBusy(btn, async () => {
+        const r = await post('interview', { naam: answers.naam, email: answers.email, opmerking: answers.opmerking, website: hp ? hp.value : '' });
+        if (!r.ok) throw new Error(r.error);
+        view = 'done-interview'; render();
+      });
+    }
+
+    // next
+    if (view === 'intro') { view = 0; return render(); }
+    const p = P[view]; collect(p.questions);
+    if (!validate(p.questions)) return;
+    if (view === 0 && (answers.volwassen === 'Nee' || answers.toestemming !== 'Ja, ik geef toestemming')) { view = 'stop'; return render(); }
+    if (view < P.length - 1) { view++; return render(); }
+
+    // laatste pagina → enquête opslaan, daarna evt. interviewpagina
+    return withBusy(btn, async () => {
+      const r = await post('survey', surveyPayload());
+      if (!r.ok) throw new Error(r.error);
+      view = answers.interview === 'Ja, ik ben bereid om deel te nemen' ? 'interview' : 'done';
+      render();
+    });
+  });
+
+  // "Anders, namelijk" tonen/verbergen + foutmelding wissen bij invullen
+  app.addEventListener('change', e => {
+    const card = e.target.closest('.q'); if (!card) return;
+    card.classList.remove('invalid');
+    const key = card.dataset.key;
+    const other = card.querySelector('.other-input');
+    if (other) {
+      const q = [...P.flatMap(p => p.questions)].find(x => x.key === key);
+      const on = [...card.querySelectorAll(`input[name="${key}"]:checked`)].some(i => i.value === q.other);
+      other.style.display = on ? 'block' : 'none';
+      if (on && e.target.value === q.other) other.focus();
+    }
+  });
+  app.addEventListener('input', e => { const c = e.target.closest('.q'); if (c) c.classList.remove('invalid'); });
+  app.addEventListener('submit', e => e.preventDefault());
+
+  // Waarschuwing bij per ongeluk sluiten tijdens het invullen
+  window.addEventListener('beforeunload', e => { if (typeof view === 'number' && view > 0) { e.preventDefault(); e.returnValue = ''; } });
+
   render();
-}
-async function fetchAll(initial){
-  if(!configured)return;
-  try{const r=await fetch(API_URL,{cache:"no-store"});const j=await r.json();if(!j.ok)throw 0;online=true;loadedOnce=true;applyEntries(j.entries,initial)}
-  catch(e){online=false;loadedOnce=true;render()}
-}
-
-$("grid").addEventListener("click",e=>{const b=e.target.closest(".cell");if(!b||b.disabled)return;const k=b.dataset.k;mine.has(k)?mine.delete(k):mine.add(k);render();showInfo(k)});
-function showInfo(k){const l=counts().get(k)||[];$("info").innerHTML="<b>"+esc(keyLabel(k))+"</b> — "+(l.length?l.length+" aanwezig: "+esc(l.slice().sort().join(", ")):"nog niemand")}
-$("slotlist").addEventListener("click",e=>{const b=e.target.closest(".slot");if(!b||b.disabled)return;const k=b.dataset.k;mine.has(k)?mine.delete(k):mine.add(k);render()});
-$("daytabs").addEventListener("click",e=>{const b=e.target.closest(".daytab");if(!b)return;mDay=+b.dataset.i;render()});
-$("grid").addEventListener("pointerover",e=>{const b=e.target.closest(".cell");if(b)showInfo(b.dataset.k)});
-$("grid").addEventListener("focusin",e=>{const b=e.target.closest(".cell");if(b)showInfo(b.dataset.k)});
-$("naam").addEventListener("input",()=>{store("vu-agenda-draftname",$("naam").value);render()});
-$("prev").onclick=()=>{weekStart.setDate(weekStart.getDate()-7);mDay=defaultDay();render()};
-$("next").onclick=()=>{weekStart.setDate(weekStart.getDate()+7);mDay=defaultDay();render()};
-$("thisweek").onclick=()=>{weekStart=startWeek();mDay=defaultDay();render()};
-
-let saving=false;
-$("save").onclick=async()=>{
-  const name=$("naam").value.trim();if(saving||!name||!configured)return;
-  // Zelfde naam op een ander apparaat? Dan die aanmelding bijwerken i.p.v. een dubbele maken.
-  if(!entries.some(e=>e.id===myId)){const same=entries.find(e=>e.name.toLowerCase()===name.toLowerCase());
-    if(same){myId=same.id;store("vu-agenda-id",myId);for(const k of same.slots)mine.add(k)}}
-  saving=true;renderStatus("Bezig met opslaan…");
-  const slots=[...mine].sort();
-  try{
-    const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({id:myId,name,slots})});
-    const j=await r.json();if(!j.ok)throw new Error(j.error);
-    savedName=slots.length?name:"";savedMine=new Set(mine);online=true;saving=false;
-    applyEntries(j.entries,false);renderStatus(slots.length?"Opgeslagen ✓":"Je aanmelding is verwijderd","saved");
-  }catch(e){saving=false;renderStatus("Opslaan lukte niet. Probeer het zo nog eens.","dirty")}
-};
-
-render();
-fetchAll(true);
-setInterval(()=>{if(!saving&&document.visibilityState==="visible")fetchAll(false)},30000);
 })();
 </script>
 </body>

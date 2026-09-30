@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resultaten – Keuzevrijheid onder maatschappelijke druk</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: thin; max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+  .tabs button { font: inherit; font-size: .9rem; font-weight: 500; white-space: nowrap; background: none; border: 0; border-bottom: 2px solid transparent; padding: 10px 10px; color: var(--ink-2); cursor: pointer; }
+  .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; padding: 12px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 16px; font-size: .92rem; }
+  .filters label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+  .filters input { accent-color: var(--accent); width: 16px; height: 16px; }
+  .filters .spacer { flex: 1; }
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+  .tiles { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-bottom: 16px; }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+  .tile .v { font-family: "Source Serif 4", Georgia, serif; font-size: 2rem; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .tile .l { color: var(--ink-2); font-size: .85rem; }
+  .tbl-wrap { overflow-x: auto; margin: 0 -4px; padding: 0 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: .88rem; font-variant-numeric: tabular-nums; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; white-space: normal; min-width: 140px; }
+  thead th { font-weight: 600; color: var(--ink-2); border-bottom: 1.5px solid var(--ink-3); font-size: .82rem; }
+  tr.sub td { color: var(--ink-3); font-size: .8rem; }
+  td.hi { font-weight: 700; color: var(--ink); }
+  td.dim { color: var(--ink-3); }
+  td.flag, .flag { color: var(--warn); font-weight: 600; }
+  .freq { display: grid; grid-template-columns: minmax(110px, 1.3fr) 2fr auto; gap: 6px 10px; align-items: center; font-size: .88rem; }
+  .freq .bar { height: 14px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+  .freq .bar > i { display: block; height: 100%; background: var(--series-1); border-radius: 0 4px 4px 0; }
+  .freq .n { font-variant-numeric: tabular-nums; color: var(--ink-2); white-space: nowrap; }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin-bottom: 14px; }
+  .controls label { display: grid; gap: 4px; font-size: .85rem; color: var(--ink-2); font-weight: 500; }
+  .controls select, .controls input[type=number] { min-width: 170px; width: auto; min-height: 38px; padding: 6px 10px; }
+  .checks { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .9rem; }
+  .checks label { display: inline-flex; gap: 6px; align-items: center; color: var(--ink); font-weight: 400; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: .78rem; font-weight: 600; background: var(--surface-2); color: var(--ink-2); }
+  .badge.good { background: color-mix(in srgb, var(--ok) 15%, var(--surface)); color: var(--ok); }
+  .badge.warn { background: color-mix(in srgb, var(--warn) 15%, var(--surface)); color: var(--warn); }
+  .badge.bad { background: color-mix(in srgb, var(--danger) 15%, var(--surface)); color: var(--danger); }
+  .interp { border-left: 3px solid var(--accent); padding: 8px 12px; background: var(--accent-soft); border-radius: 0 8px 8px 0; font-size: .92rem; margin-top: 12px; }
+  .legend { display: flex; gap: 16px; font-size: .82rem; color: var(--ink-2); margin-top: 6px; flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+  svg text { fill: var(--ink-2); font-family: inherit; }
+  .open-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .open-list li { padding: 10px 12px; background: var(--surface-2); border-radius: 8px; font-size: .92rem; white-space: pre-wrap; }
+  .login { max-width: 440px; margin: 40px auto; }
+  .panel[hidden] { display: none; }
+  h3 .badge { margin-left: 8px; vertical-align: middle; }
+  .note { font-size: .82rem; color: var(--ink-3); margin-top: 8px; }
+  @media print { .topbar, .filters, .controls, .tabs, footer { display: none !important; } .card { box-shadow: none; break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="topbar wide">
+  <div class="inner"><div class="brand">Resultaten · Keuzevrijheid onder maatschappelijke druk</div>
+    <span id="srcBadge" class="badge" hidden></span>
+    <a class="small" href="index.html">Naar enquête</a></div>
+  <nav class="tabs" id="tabs" role="tablist" hidden></nav>
+</div>
+
+<main class="wrap wide">
+  <section id="login" class="login card">
+    <div class="eyebrow">Alleen voor de onderzoeker</div>
+    <h2>Resultaten bekijken</h2>
+    <p class="muted small">Vul het wachtwoord in dat je in Google Apps Script hebt ingesteld (RESULTS_PASSWORD).</p>
+    <form id="loginForm">
+      <input type="password" id="pw" placeholder="Wachtwoord" autocomplete="current-password" required>
+      <div id="loginErr" class="notice error" style="display:none;margin-top:10px"></div>
+      <div class="nav" style="margin-top:14px">
+        <button type="button" class="btn" id="demoBtn">Voorbeelddata bekijken</button>
+        <button class="btn primary" id="loginBtn">Inloggen</button>
+      </div>
+    </form>
+  </section>
+
+  <div id="dash" hidden>
+    <div class="filters">
+      <strong>Steekproef:</strong>
+      <label><input type="checkbox" id="fVrouw" checked> Alleen vrouwen</label>
+      <label><input type="checkbox" id="fMoslim" checked> Alleen moslim</label>
+      <label><input type="checkbox" id="fSnel"> Zeer snelle invullers uitsluiten (&lt; 2 min)</label>
+      <span class="spacer"></span>
+      <span id="nInfo" class="muted"></span>
+      <button class="btn small" id="reload" title="Nieuwste antwoorden ophalen">Vernieuwen</button>
+    </div>
+    <div id="panels"></div>
+  </div>
+</main>
+
+<script src="config.js"></script>
+<script src="questions.js"></script>
+<script src="stats.js"></script>
+<script src="demo.js"></script>
+<script src="results.js"></script>
+</body>
+</html>

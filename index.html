@@ -43,6 +43,7 @@
   const startedAt = Date.now();
   let view = 'intro';           // 'intro' | page index | 'stop' | 'interview' | 'done'
   let busy = false;
+  let surveySent = false;
 
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const P = SURVEY.pages;
@@ -123,7 +124,7 @@
     } else if (view === 'interview') {
       const iv = SURVEY.interview;
       setProgress(1, 'Interview');
-      app.innerHTML = `<div class="section-head"><div class="eyebrow">Je enquête is verzonden ✓</div><h2>${esc(iv.title)}</h2>${iv.text.map(t => `<p>${esc(t)}</p>`).join('')}</div>
+      app.innerHTML = `<div class="section-head"><div class="eyebrow">Je enquête is ingevuld ✓</div><h2>${esc(iv.title)}</h2>${iv.text.map(t => `<p>${esc(t)}</p>`).join('')}</div>
         ${iv.questions.map(renderQuestion).join('')}
         <div class="hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
         <div id="formErr" class="notice error" style="display:none" role="alert"></div>
@@ -183,9 +184,36 @@
   // ── Versturen ─────────────────────────────────────────────
   async function post(action, data) {
     if (!configured) { await new Promise(r => setTimeout(r, 400)); console.info('[testmodus]', action, data); return { ok: true }; }
-    const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action, data, website: data.website || '' }) });
+    // keepalive: het verzenden gaat door, ook als de deelnemer het venster meteen sluit
+    const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', keepalive: true, body: JSON.stringify({ action, data, website: data.website || '' }) });
     return res.json();
   }
+
+  // Verzenden op de achtergrond: de deelnemer hoeft niet te wachten op Google (dat duurt soms 5-10 s).
+  // Mislukt het, dan verschijnt een melding met een knop om het opnieuw te proberen.
+  const pending = new Set();
+  function sendInBackground(action, data, tries = 0) {
+    const job = post(action, data).then(r => { if (!r || !r.ok) throw new Error(r && r.error); hideSaveError(action); })
+      .catch(err => {
+        console.error(err);
+        if (tries < 2) return new Promise(r => setTimeout(r, 1500)).then(() => sendInBackground(action, data, tries + 1));
+        showSaveError(action, data);
+      })
+      .finally(() => pending.delete(job));
+    pending.add(job);
+    return job;
+  }
+  function showSaveError(action, data) {
+    let el = document.getElementById('saveErr_' + action);
+    if (!el) {
+      el = document.createElement('div'); el.id = 'saveErr_' + action; el.className = 'notice error'; el.setAttribute('role', 'alert');
+      el.style.cssText = 'position:fixed;left:16px;right:16px;bottom:16px;max-width:728px;margin:0 auto;z-index:20;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;box-shadow:var(--shadow)';
+      document.body.appendChild(el);
+    }
+    el.innerHTML = `<span>${action === 'survey' ? 'Je antwoorden konden niet worden opgeslagen.' : 'Je aanmelding kon niet worden verzonden.'} Controleer je internetverbinding.</span><button type="button" class="btn small primary">Opnieuw proberen</button>`;
+    el.querySelector('button').onclick = () => { el.querySelector('button').disabled = true; el.querySelector('span').textContent = 'Bezig met verzenden…'; sendInBackground(action, data); };
+  }
+  function hideSaveError(action) { const el = document.getElementById('saveErr_' + action); if (el) el.remove(); }
 
   function surveyPayload() {
     const out = {};
@@ -225,11 +253,8 @@
       const qs = SURVEY.interview.questions; collect(qs);
       if (!validate(qs)) return;
       const hp = app.querySelector('[name="website"]');
-      return withBusy(btn, async () => {
-        const r = await post('interview', { naam: answers.naam, email: answers.email, opmerking: answers.opmerking, website: hp ? hp.value : '' });
-        if (!r.ok) throw new Error(r.error);
-        view = 'done-interview'; render();
-      });
+      sendInBackground('interview', { naam: answers.naam, email: answers.email, opmerking: answers.opmerking, website: hp ? hp.value : '' });
+      view = 'done-interview'; return render();
     }
 
     // next
@@ -240,12 +265,11 @@
     if (view < P.length - 1) { view++; return render(); }
 
     // laatste pagina → enquête opslaan, daarna evt. interviewpagina
-    return withBusy(btn, async () => {
-      const r = await post('survey', surveyPayload());
-      if (!r.ok) throw new Error(r.error);
-      view = answers.interview === 'Ja, ik ben bereid om deel te nemen' ? 'interview' : 'done';
-      render();
-    });
+    if (surveySent) return;
+    surveySent = true;
+    sendInBackground('survey', surveyPayload());
+    view = answers.interview === 'Ja, ik ben bereid om deel te nemen' ? 'interview' : 'done';
+    render();
   });
 
   // "Anders, namelijk" tonen/verbergen + foutmelding wissen bij invullen
@@ -265,7 +289,7 @@
   app.addEventListener('submit', e => e.preventDefault());
 
   // Waarschuwing bij per ongeluk sluiten tijdens het invullen
-  window.addEventListener('beforeunload', e => { if (typeof view === 'number' && view > 0) { e.preventDefault(); e.returnValue = ''; } });
+  window.addEventListener('beforeunload', e => { if ((typeof view === 'number' && view > 0) || pending.size) { e.preventDefault(); e.returnValue = ''; } });
 
   render();
 })();
